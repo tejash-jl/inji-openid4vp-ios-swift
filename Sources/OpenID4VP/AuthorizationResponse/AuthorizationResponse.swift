@@ -42,34 +42,19 @@ struct AuthorizationResponse{
     }
     
     private static func constructHttpRequestBody(vpToken: VpToken, presentationSubmission: PresentationSubmission, responseUri: String, state: String, networkManager: NetworkManaging = NetworkManager.shared) async throws -> String? {
-        let encodedVPTokenData: String, encodedPresentationSubmissionData: String
+        let requestBody: String
         do {
-            encodedVPTokenData = try encodeToJsonString(vpToken)!
+            let authorizationResponseBody = AuthorizationResponseBody(vp_token: vpToken, presentation_submission: presentationSubmission, state: state)
+            requestBody = try encodeToJsonString(authorizationResponseBody)!
         } catch let error {
-            throw Logger.handleException(exceptionType: "JsonEncodingFailed", message: error.localizedDescription, fieldPath: ["vp_token"], className: AuthorizationResponse.className)
+            throw Logger.handleException(exceptionType: "JsonEncodingFailed", message: error.localizedDescription, fieldPath: ["authorization_response"], className: AuthorizationResponse.className)
         }
-
-        do {
-            encodedPresentationSubmissionData = try encodeToJsonString(presentationSubmission)!
-        } catch let error {
-            throw Logger.handleException(exceptionType: "JsonEncodingFailed", message: error.localizedDescription, fieldPath: ["presentation_submission"], className: AuthorizationResponse.className)
-        }
-        
-        var bodyComponents = [URLQueryItem]()
-        bodyComponents.append(URLQueryItem(name: "vp_token", value: encodeQueryValue(encodedVPTokenData)))
-        bodyComponents.append(URLQueryItem(name: "presentation_submission", value: encodeQueryValue(encodedPresentationSubmissionData)))
-        bodyComponents.append(URLQueryItem(name: "state", value: encodeQueryValue(state)))
-
-        var urlComponents = URLComponents()
-        urlComponents.queryItems = bodyComponents
-
-        let requestBody = urlComponents.query
         
         guard let url = URL(string: responseUri) else {
             throw Logger.handleException(exceptionType: "UrlCreationFailed", fieldPath: ["response_uri"], className: AuthorizationResponse.className)
         }
 
-        return try await networkManager.sendHTTPRequest(url: url, method: HTTP_METHOD.POST, bodyParams: requestBody ?? "", headers: ["Content-Type" : "application/x-www-form-urlencoded"])
+        return try await networkManager.sendHTTPRequest(url: url, method: HTTP_METHOD.POST, bodyParams: requestBody, headers: ["Content-Type" : "application/json"])
     }
 
 }
