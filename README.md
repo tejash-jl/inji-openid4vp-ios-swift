@@ -54,10 +54,10 @@ inji-openid4vp-ios-swift is an implementation of OpenID for Verifiable Presentat
 
 #### Notes on Supported response modes
 1. `direct_post` : 
-   - Authorization Response is sent as a POST request to the `response_uri` endpoint. Authorization Response is attached as request body in `application/x-www-form-urlencoded` HTTP content type
+   - Authorization Response is sent as a POST request to the `response_uri` endpoint. Authorization Response is attached as request body in `application/json` HTTP content type
 2. `direct_post.jwt` : 
    - Authorization Response is sent as a POST request to the `response_uri` endpoint. 
-   - Authorization Response is attached as request body in `application/x-www-form-urlencoded` HTTP content type. 
+   - Authorization Response is attached as request body in `application/json` HTTP content type. 
    - The response is encrypted using the public key provided in the client_metadata of the authorization request.
    - The created JWE's header contains the `apu` (producer info) as wallet generated nonce (with entropy 16 bytes) and `apv` (recipient info) as the verifier nonce i.e., the nonce received in the authorization request.
    > Note: If the Authorization request includes an `mso_mdoc` format VP, it can only use the `direct_post.jwt` response mode, as required by the ISO-18013-7 specification. Other supported response mode (`direct_post`) is not applicable.

@@ -11,6 +11,7 @@ enum Header : String {
 
 public enum ContentTypes : String {
     case applicationJwt = "application/oauth-authz-req+jwt"
+    case applicationJson = "application/json"
     case applicationFormUrlEncoded = "application/x-www-form-urlencoded"
 }
 

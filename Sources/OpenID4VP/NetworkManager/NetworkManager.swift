@@ -87,6 +87,9 @@ public struct NetworkManager: NetworkManaging {
     }
     
     private func getEncoding(for contentType: String?) -> ParameterEncoding {
+        if contentType == ContentTypes.applicationJson.rawValue {
+            return JSONEncoding.default
+        }
         return URLEncoding.default
     }
     

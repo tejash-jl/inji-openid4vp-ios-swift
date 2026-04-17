@@ -124,7 +124,7 @@ struct DirectPostJwtResponseModeHandler : ResponseModeBasedHandler {
         let encryptedBody = try JWEHandler(contentEncryptionAlgorithm: clientMetadata.authorizationEncryptedResponseEnc!, keyEncryptionAlgorithm: clientMetadata.authorizationEncryptedResponseAlg!, publicKey: verifierPublicKey, producerInfo: producerInfo, recipientInfo: recipientInfo).generateEncryptedResponse(payload: bodyParams)
 
         let requestBody = ["response": encryptedBody]
-        let response = try await networkManager.sendHTTPRequest(url: url, method: .post, bodyParams: requestBody, headers: [Header.contentType.rawValue : ContentTypes.applicationFormUrlEncoded.rawValue])
+        let response = try await networkManager.sendHTTPRequest(url: url, method: .post, bodyParams: requestBody, headers: [Header.contentType.rawValue : ContentTypes.applicationJson.rawValue])
 
         return response
     }

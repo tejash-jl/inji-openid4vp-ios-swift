@@ -38,7 +38,7 @@ struct DirectPostResponseModeHandler : ResponseModeBasedHandler {
             url: url,
             method: .post,
             bodyParams: requestBody,
-            headers: [Header.contentType.rawValue: ContentTypes.applicationFormUrlEncoded.rawValue]
+            headers: [Header.contentType.rawValue: ContentTypes.applicationJson.rawValue]
         )
     }
 

@@ -36,7 +36,7 @@ final class DirectPostResponseModeHandlerTests: XCTestCase {
             XCTAssertEqual(HttpMethod.post, recordedRequest?.requestMethod)
             XCTAssertTrue(recordedRequest?.requestBody?.keys.count == 3)
             XCTAssertTrue((recordedRequest?.requestBody?.keys.allSatisfy(["vp_token", "presentation_submission", "state"].contains(_:))) != nil)
-            assertDictionariesEqual(expected: ["Content-Type": ContentTypes.applicationFormUrlEncoded.rawValue], actual: recordedRequest?.requestHeaders)
+            assertDictionariesEqual(expected: ["Content-Type": ContentTypes.applicationJson.rawValue], actual: recordedRequest?.requestHeaders)
             XCTAssertEqual("Response has been shared successfully here.", result.body)
         }
     }
