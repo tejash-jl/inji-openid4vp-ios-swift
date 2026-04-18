@@ -44,7 +44,8 @@ struct AuthorizationResponse{
     private static func constructHttpRequestBody(vpToken: VpToken, presentationSubmission: PresentationSubmission, responseUri: String, state: String, networkManager: NetworkManaging = NetworkManager.shared) async throws -> String? {
         let requestBody: String
         do {
-            let authorizationResponseBody = AuthorizationResponseBody(vp_token: vpToken, presentation_submission: presentationSubmission, state: state)
+            let encodedVPTokenData = try encodeToJsonString(vpToken)!
+            let authorizationResponseBody = AuthorizationResponseBody(vp_token: encodedVPTokenData, presentation_submission: presentationSubmission, state: state)
             requestBody = try encodeToJsonString(authorizationResponseBody)!
         } catch let error {
             throw Logger.handleException(exceptionType: "JsonEncodingFailed", message: error.localizedDescription, fieldPath: ["authorization_response"], className: AuthorizationResponse.className)
