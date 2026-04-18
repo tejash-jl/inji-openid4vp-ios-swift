@@ -10,7 +10,7 @@ struct AuthorizationResponse {
     func toJsonEncodedMap() throws -> [String: String] {
         var bodyParams: [String: String] = [:]
 
-        bodyParams["vp_token"] = try vpToken.encodedString(fieldName: "vp_token", className: Self.className)
+        bodyParams["vp_token"] = try encode(vpToken, fieldName: "vp_token", className: Self.className)
         bodyParams["presentation_submission"] = try encode(
             presentationSubmission,
             fieldName: "presentation_submission",
@@ -40,17 +40,18 @@ public struct AnyEncodable: Encodable {
 
 
 
-public enum VPTokenType {
+public enum VPTokenType: Encodable {
     case vpTokenArray([VPToken])
     case vpTokenElement(VPToken)
 
-    func encodedString(fieldName: String, className: String) throws -> String {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
         switch self {
         case .vpTokenArray(let tokens):
             let wrapped = tokens.map { AnyEncodable($0) }
-            return try encode(wrapped, fieldName: fieldName, className: className)
+            try container.encode(wrapped)
         case .vpTokenElement(let token):
-            return try encode(AnyEncodable(token), fieldName: fieldName, className: className)
+            try container.encode(AnyEncodable(token))
         }
     }
 }
